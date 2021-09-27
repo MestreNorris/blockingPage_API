@@ -13,8 +13,8 @@ const updateAll = async () => {
 
             if (metricData.lastUpdate !== dateNow()) {
                 await metricDB.updateOne({ _id: metricData._id }, { $set: { lastUpdate: dateNow() } });
+                console.log('Atualizando ...');
                 updateDatabaseBlacklist(blacklistDB, whitelistDB);
-                console.log('Atualizando');
             } else {
                 console.log('Atualizado');
             }

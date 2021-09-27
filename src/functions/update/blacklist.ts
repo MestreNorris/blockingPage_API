@@ -6,7 +6,7 @@ const updateDatabaseBlacklist = async (blacklistDB, whitelistDB) => {
     let dataBlacklist = await blacklistDB.find().toArray();
     const dataWhitelist = await whitelistDB.find().toArray();
 
-    fetchDataPhishTank(dataWhitelist)
+    await fetchDataPhishTank(dataWhitelist)
         .then(fetchArray => {
             console.log('Processando dos dados coletados de PhishTank');
             if (dataBlacklist.length > 0) { dataBlacklist = sortArray(dataBlacklist); }

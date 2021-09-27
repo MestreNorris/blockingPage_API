@@ -105,7 +105,7 @@ function databaseMetric({ database, title }) {
 export const getStaticProps: GetStaticProps = async (context) => {
   const data = await getDataAllDatabases();
   const database = JSON.parse(JSON.stringify(data.metric));
-  return { props: { database, title: 'Metric' }, revalidate: 60 }
+  return { props: { database, title: 'Metric' }, revalidate: 10 }
 }
 
 export default databaseMetric;

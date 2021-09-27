@@ -55,7 +55,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
   let duplicates = 0, database = JSON.parse(JSON.stringify(data.whitelist));
   if (database.length != 0) { database = sortArray(database); duplicates = numberDuplicates(database); }
 
-  return { props: { database, duplicates, title: 'Whitelist' }, revalidate: 60 }
+  return { props: { database, duplicates, title: 'Whitelist' }, revalidate: 10 }
 }
 
 export default databaseWhitelist;

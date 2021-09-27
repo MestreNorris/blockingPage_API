@@ -22,7 +22,7 @@ const browserHeaders = {
 };
 
 const getHtml = async (page) => {
-    try { return (await axios.get(URL_PHISHTANK + page, { headers: browserHeaders }).then((response) => response.data)); }
+    try { return (await axios.get(URL_PHISHTANK + page).then((response) => response.data)); }
     catch (_) { return false; }
 };
 

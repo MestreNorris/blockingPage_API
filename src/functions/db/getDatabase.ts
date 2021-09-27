@@ -1,5 +1,6 @@
 import { connectToDatabase } from './mongodb';
 import { Metric } from '../../interfaces/index'
+import { dateNow } from '../data/info';
 import { Db } from 'mongodb';
 
 const getAllDatabases = async () => {
@@ -12,7 +13,7 @@ const getAllDatabases = async () => {
         const metricCount = await metricDB.find().count();
 
         if (metricCount == 0) {
-            const metric: Metric = { qntRequest: new Array(), lastUpdate: new Date().toLocaleDateString("pt-BR"), qntBlockedPhising: new Array(), listPages: new Array() }
+            const metric: Metric = { qntRequest: new Array(), lastUpdate: dateNow(), qntBlockedPhising: new Array(), listPages: new Array() }
             await metricDB.insertOne(metric);
         }
 

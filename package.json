@@ -1,0 +1,33 @@
+{
+  "private": true,
+  "name": "blocking-page",
+  "version": "0.0.3",
+  "keywords": ["phising", "clean browser"],
+  "description": "Ferramenta para bloqueio de links de phising",
+  "author": "Alan Pereira",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start",
+    "type-check": "tsc"
+  },
+  "dependencies": {
+    "@babel/core": "^7.15.5",
+    "@babel/preset-env": "^7.15.6",
+    "@babel/preset-typescript": "^7.15.0",
+    "@types/node": "^16.9.1",
+    "@types/react": "^17.0.20",
+    "@types/react-dom": "^17.0.9",
+    "axios": "^0.21.4",
+    "cheerio": "^1.0.0-rc.10",
+    "mongodb": "^4.1.2",
+    "next": "latest",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "typescript": "^4.4.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MestreNorris/blockingPage_API"
+  } 
+}

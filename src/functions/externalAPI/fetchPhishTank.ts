@@ -25,7 +25,6 @@ const browserHeaders = {
 
 const fetchDataPhishTank = async (dataWhitelist) => {
     let database = await getData();
-    writeFile(database);
 
     if (database) {
         for (let index = 0; index < database.length; index++) {
@@ -45,8 +44,6 @@ const getData = async () => {
     try { return (await axios.get(URL_PHISHTANK, { headers: browserHeaders }).then((response) => { return response.data })); }
     catch (_) { return null; }
 };
-
-const writeFile = (data) => { fs.writeFileSync('./phishTank.json', JSON.stringify(data), 'utf8'); }
 
 function isValidUrl(string, dataWhitelist) {
     try {

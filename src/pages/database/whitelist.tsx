@@ -1,7 +1,7 @@
-import { getDataAllDatabases } from '../../functions/db/getDatabase'
-import { sortArray, numberDuplicates } from '../../functions/data/info';
 import { GetStaticProps } from 'next';
 import Layout from '../../components/Layout';
+import { numberDuplicates, sortArray } from '../../functions/data/array';
+import { getDataAllDatabases } from '../../functions/db/getDatabase';
 
 function databaseWhitelist({ database, duplicates, title }) {
   return (
@@ -11,17 +11,17 @@ function databaseWhitelist({ database, duplicates, title }) {
         <table className='info'>
           <thead>
             <tr>
-              <th id="database">NÚMERO DE REGISTROS DO BANCO DE DADOS</th>
+              <th>NÚMERO DE REGISTROS DO BANCO DE DADOS</th>
               <th>{database.length}</th>
             </tr>
             <tr>
-              <th id="duplicate">NÚMERO DE REGISTROS DUPLICADOS</th>
+              <th>NÚMERO DE REGISTROS DUPLICADOS</th>
               <th>{duplicates}</th>
             </tr>
           </thead>
         </table>
         <br />
-        <table className='data'>
+        <table className='dataWhitelist'>
           <thead>
             <tr>
               <th>ID</th>
@@ -29,7 +29,7 @@ function databaseWhitelist({ database, duplicates, title }) {
               <th>DATA DA CRIAÇÃO</th>
             </tr>
           </thead>
-          <tbody className="alignDatabase">
+          <tbody>
             {database.map((links) => (
               <tr key={links._id}>
                 <td>{links._id}</td>

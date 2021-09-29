@@ -1,6 +1,6 @@
-import { getDataAllDatabases } from '../../functions/db/getDatabase'
 import { GetStaticProps } from 'next';
 import Layout from '../../components/Layout';
+import { getDataAllDatabases } from '../../functions/db/getDatabase';
 
 function databaseMetric({ database, title }) {
   return (
@@ -20,7 +20,7 @@ function databaseMetric({ database, title }) {
           </thead>
         </table>
         <br />
-        <table className='data'>
+        <table className='dataMetric'>
           <thead>
             <tr>
               <th colSpan={2}>REQUISIÇÕES REALIZADAS</th>
@@ -46,7 +46,7 @@ function databaseMetric({ database, title }) {
           </tfoot>
         </table>
         <br />
-        <table className='data'>
+        <table className='dataMetric'>
           <thead>
             <tr>
               <th colSpan={2}>LINKS BLOQUEADOS</th>
@@ -72,7 +72,7 @@ function databaseMetric({ database, title }) {
           </tfoot>
         </table>
         <br />
-        <table className='data'>
+        <table className='dataMetric'>
           <thead>
             <tr>
               <th colSpan={2}>LISTA DE PÁGINAS MAIS ACESSADAS</th>

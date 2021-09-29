@@ -1,4 +1,4 @@
-import { dateNow } from '../../functions/data/info';
+import { dateNow } from "../data/date";
 
 const updateMetricQntRequest = async (metricDB, metricData) => {
     try {

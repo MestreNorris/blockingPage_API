@@ -1,7 +1,7 @@
-import { connectToDatabase } from './mongodb';
-import { Metric } from '../../interfaces/index'
-import { dateNow } from '../data/info';
+import { Metric } from '../interfaces/index'
 import { Db } from 'mongodb';
+import { connectToDatabase } from './mongodb';
+import { dateNow } from '../data/date';
 
 const getAllDatabases = async () => {
     try {

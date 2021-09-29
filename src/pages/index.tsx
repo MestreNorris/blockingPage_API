@@ -1,5 +1,5 @@
 import Layout from '../components/Layout'
-import { dateNow } from '../functions/data/info';
+import { dateNow } from '../functions/data/date'
 
 const IndexPage = () => (
   <Layout title="Home">
@@ -7,35 +7,35 @@ const IndexPage = () => (
     <table className='info'>
       <thead>
         <tr>
-          <th>Projeto</th>
+          <th>PROJETO</th>
           <th>BlockingPage</th>
         </tr>
         <tr>
-          <th>Descrição</th>
+          <th>DESCRIÇÃO</th>
           <th>Ferramenta para bloqueio de links de phising</th>
         </tr>
         <tr>
-          <th>Autor</th>
+          <th>AUTOR</th>
           <th>Alan Pereira</th>
         </tr>
         <tr>
-          <th>Horário</th>
+          <th>DATA ATUAL</th>
           <th>{dateNow()}</th>
         </tr>
         <tr>
-          <th>Versão</th>
+          <th>VERSÃO</th>
           <th>0.0.3</th>
         </tr>
         <tr>
-          <th>Banco de dados existentes</th>
+          <th>BANCO DE DADOS EXISTENTES</th>
           <th>Blacklist | Whitelist | Metric</th>
         </tr>
         <tr>
-          <th>Formato da resposta da API</th>
+          <th>FORMATO DE RESPOSTA DA API</th>
           <th>Json</th>
         </tr>
         <tr>
-          <th>Formato de compactação exigido no cabeçalho da requisição</th>
+          <th>FORMATO DE COMPACTAÇÃO EXIGIDA NO CABEÇALHO DA REQUISIÇÃO</th>
           <th>Accept-Encoding: gzip</th>
         </tr>
       </thead>

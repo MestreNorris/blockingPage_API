@@ -1,12 +1,14 @@
-const axios = require('axios');
-const cheerio = require('cheerio');
+import axios from 'axios'
+import fs from 'fs'
+import { removeDuplicates } from '../data/array';
+import { formatDate } from '../data/date';
 
 const { URL_PHISHTANK } = process.env
 let listBlacklist = [];
 
 const browserHeaders = {
     'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
-    'accept-encoding': 'gzip, deflate, br',
+    'accept-encoding': 'gzip',
     'accept-language': 'pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7',
     'cache-control': 'max-age=0',
     'dnt': '1',
@@ -21,44 +23,30 @@ const browserHeaders = {
     'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36(KHTML, like Gecko) Chrome / 93.0.4577.82 Safari / 537.36'
 };
 
-const getHtml = async (page) => {
-    try { return (await axios.get(URL_PHISHTANK + page).then((response) => response.data)); }
-    catch (_) { return false; }
-};
-
-const getDataInHtml = (html, dataWhitelist) => {
-    const $ = cheerio.load(html);
-    const table = $('table > tbody > tr');
-    if (table.length > 2) {
-        for (let index = 1; index < table.length - 1; index++) {
-            const data = $(table[index]).text().split('http');
-            const url = 'http' + data[1].split('added')[0];
-            const link = isValidUrl(url, dataWhitelist);
-            if ((link != null) && (isDuplicate(listBlacklist, link))) { listBlacklist.push(link); }
-        }
-        return true;
-    } else { return false }
-
-};
-
 const fetchDataPhishTank = async (dataWhitelist) => {
-    let getData = true, page = 0;
+    let database = await getData();
+    writeFile(database);
 
-    while (listBlacklist.length) { listBlacklist.pop(); }
+    if (database) {
+        for (let index = 0; index < database.length; index++) {
+            let url = database[index].url, online = false;
+            let date = formatDate(database[index].verification_time);
 
-    do {
-        await getHtml(page)
-            .then((html) => {
-                if (html) {
-                    const data = getDataInHtml(html, dataWhitelist);
-                    if (data) { page++; console.log(page); } else { getData = false; }
-                } else { getData = false; }
-            })
-            .catch(() => { getData = false; });
-    } while (getData);
+            if ((database[index].online == 'yes') && (database[index].verified == 'yes')) { online = true; }
+            url = isValidUrl(url, dataWhitelist);
+            if (url != null) { listBlacklist.push({ link: url, date, online }) }
+        }
 
-    return listBlacklist;
+        return (removeDuplicates(listBlacklist))
+    } else { return null }
 };
+
+const getData = async () => {
+    try { return (await axios.get(URL_PHISHTANK, { headers: browserHeaders }).then((response) => { return response.data })); }
+    catch (_) { return null; }
+};
+
+const writeFile = (data) => { fs.writeFileSync('./phishTank.json', JSON.stringify(data), 'utf8'); }
 
 function isValidUrl(string, dataWhitelist) {
     try {
@@ -75,11 +63,6 @@ function isValidUrl(string, dataWhitelist) {
         else { return null; }
     }
     catch (_) { return null }
-}
-
-function isDuplicate(array, link) {
-    for (let index = 0; index < array.length; index++) { if (array[index] === link) { return false; } }
-    return true;
 }
 
 export { fetchDataPhishTank }

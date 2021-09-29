@@ -1,65 +1,57 @@
-import { Blacklist } from '../../interfaces/index'
-import { sortArray, dateNow } from '../../functions/data/info';
-import { fetchDataPhishTank } from '../externalAPI/fetchPhishTank'
+import { searchBinary, sortArray } from '../data/array';
+import { dateNow } from '../data/date';
+import { fetchDataPhishTank } from '../externalAPI/fetchPhishTank';
+import { Blacklist } from '../interfaces/index'
 
-const updateDatabaseBlacklist = async (blacklistDB, whitelistDB) => {
-    let dataBlacklist = await blacklistDB.find().toArray();
-    const dataWhitelist = await whitelistDB.find().toArray();
-
+const updateDatabaseBlacklist = async (blacklistDB, whitelistDB, dataBlacklist, dataWhitelist) => {
     await fetchDataPhishTank(dataWhitelist)
         .then(fetchArray => {
-            console.log('Processando dos dados coletados de PhishTank');
-            if (dataBlacklist.length > 0) { dataBlacklist = sortArray(dataBlacklist); }
-            const { newArr, updateActivity } = newArray(dataBlacklist, fetchArray);
-            if (newArr.length != 0) { blacklistDB.insertMany(newArr); console.log('Novos links adicionados ao BlacklistDB'); }
-            return updateActivity;
-        }).then((updateActivity) => {
-            if (updateActivity.length > 0) {
-                for (let index = 0; index < updateActivity.length; index++) {
-                    for (let j = 0; j < dataBlacklist.length; j++) {
-                        if (dataBlacklist[j]._id.toString() === updateActivity[index]) {
-                            let status = false;
-                            for (let k = 0; k < dataBlacklist[j].activityDate.length; k++) {
-                                if (dataBlacklist[j].activityDate[k].date == dateNow()) { status = false; break; }
-                                else { status = true; }
+            if (fetchArray != null) {
+                //Ordena Array
+                if (dataBlacklist.length > 0) { dataBlacklist = sortArray(dataBlacklist); }
+
+                //Retorna array com dados para inserir ou atualizar
+                const { newArr, updateActivity } = newArray(dataBlacklist, fetchArray);
+
+                //Se tiver dados para adicionar, insira no DB
+                if (newArr.length != 0) { blacklistDB.insertMany(newArr); }
+
+                if (updateActivity.length > 0) {
+                    let updateList = [];
+                    //Identifica atividade dos links diariamente
+                    for (let index = 0; index < updateActivity.length; index++) {
+                        let lastObj = updateActivity[index].activityDate.length - 1;
+                        if (lastObj < 0) {
+                            updateList.push(updateActivity[index]._id);
+                        } else {
+                            if (updateActivity[index].activityDate[lastObj].date != dateNow()) {
+                                updateList.push(updateActivity[index]._id);
                             }
-                            if (status == true) {
-                                blacklistDB.updateOne({ _id: dataBlacklist[j]._id }, { $push: { activityDate: { date: dateNow(), databaseActivity: { pishTank: true, openPhish: false } } } });
-                                console.log('Atualizou atividade de 1 documento');
-                            }
-                            break;
                         }
+                    }
+
+                    //Atualiza a atividade dos links
+                    if (updateList.length > 0) {
+                        blacklistDB.updateMany({ _id: { $in: updateList } }, { $push: { activityDate: { date: dateNow(), databaseActivity: { pishTank: true, openPhish: false } } } });
                     }
                 }
             }
-            console.log('Processamento concluído');
-        });
-}
-
-const searchBinary = (arr, x) => {
-    let start = 0, end = arr.length - 1;
-    while (start <= end) {
-        let mid = Math.floor((start + end) / 2);
-        if (arr[mid].link === x) { return arr[mid]._id; }
-        else if (arr[mid].link < x) { start = mid + 1; }
-        else { end = mid - 1; }
-    }
-    return false;
+        }).catch((_) => { return null });
 }
 
 const newArray = (arrayDatabase, arrayFetch) => {
     const newArr = [], updateActivity = [];
 
     for (let index = 0; index < arrayFetch.length; index++) {
-        const isExist = searchBinary(arrayDatabase, arrayFetch[index]);
+        const isExist = searchBinary(arrayDatabase, arrayFetch[index].link);
         if (isExist == false) {
             const newBlacklist: Blacklist = {
-                link: arrayFetch[index],
-                creatAt: dateNow(),
+                link: arrayFetch[index].link,
+                creatAt: arrayFetch[index].date,
                 activityDate: new Array({ date: dateNow(), databaseActivity: { pishTank: true, openPhish: false } })
             };
             newArr.push(newBlacklist);
-        } else { updateActivity.push(isExist.toString()); }
+        } else { updateActivity.push(isExist); }
     }
     return { newArr, updateActivity };
 }

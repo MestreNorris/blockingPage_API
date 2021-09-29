@@ -1,7 +1,7 @@
-import { getDataAllDatabases } from '../../functions/db/getDatabase'
-import { sortArray, numberDuplicates } from '../../functions/data/info';
 import { GetStaticProps } from 'next';
 import Layout from '../../components/Layout';
+import { numberDuplicates, sortArray } from '../../functions/data/array';
+import { getDataAllDatabases } from '../../functions/db/getDatabase';
 
 function databaseBlacklist({ database, duplicates, title }) {
   return (
@@ -21,7 +21,7 @@ function databaseBlacklist({ database, duplicates, title }) {
           </thead>
         </table>
         <br />
-        <table className='data'>
+        <table className='dataBlacklist'>
           <thead>
             <tr>
               <th>ID</th>
@@ -30,7 +30,7 @@ function databaseBlacklist({ database, duplicates, title }) {
               <th>DIAS DE ATIVIDADE</th>
             </tr>
           </thead>
-          <tbody className="alignDatabase">
+          <tbody>
             {database.map((links) => (
               <tr key={links._id}>
                 <td>{links._id}</td>

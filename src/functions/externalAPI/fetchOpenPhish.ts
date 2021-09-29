@@ -1,4 +1,3 @@
-const fs = require('fs');
 import { removeDuplicates } from '../data/array';
 import { dateNow } from '../data/date';
 import { fetchData, isValidUrl } from '../data/fetch';

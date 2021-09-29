@@ -1,6 +1,6 @@
 import { searchBinary, sortArray } from '../data/array';
 import { dateNow } from '../data/date';
-import { fetchOpenPhish } from '../externalAPI/fetchopenPhish';
+import { fetchOpenPhish } from '../externalAPI/fetchOpenPhish';
 import { fetchPhishTank } from '../externalAPI/fetchPhishTank';
 import { Blacklist } from '../interfaces/index'
 

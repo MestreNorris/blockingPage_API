@@ -2,7 +2,10 @@
   "private": true,
   "name": "blocking-page",
   "version": "0.0.3",
-  "keywords": ["phising", "clean browser"],
+  "keywords": [
+    "phising",
+    "clean browser"
+  ],
   "description": "Ferramenta para bloqueio de links de phising",
   "author": "Alan Pereira",
   "scripts": {
@@ -29,5 +32,5 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/MestreNorris/blockingPage_API"
-  } 
+  }
 }

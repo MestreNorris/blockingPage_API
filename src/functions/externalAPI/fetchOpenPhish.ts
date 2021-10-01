@@ -8,6 +8,7 @@ let listBlacklist_OpenPhish = [];
 const fetchOpenPhish = async (dataWhitelist) => {
     const db = await fetchData(URL_OPENPHISH);
     let database = db.split('\n');
+    console.log(database);
 
     if (database) {
         for (let index = 0; index < database.length; index++) {

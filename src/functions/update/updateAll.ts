@@ -19,7 +19,11 @@ const updateAll = async () => {
             if (metricData.lastUpdate !== dateNow()) {
                 await metricDB.updateOne({ _id: metricData._id }, { $set: { lastUpdate: dateNow() } });
                 //await fetchPhishTankAndUpdateDatabase(blacklistDB, whitelistDB, blacklist, whitelist).then(() => { console.log('Fetch phishTank realizado, banco de dados atualizado com sucesso!'); });
-                await fetchOpenPhishAndUpdateDatabase(blacklistDB, whitelistDB, blacklist, whitelist).then(() => { console.log('Fetch openPhish realizado, banco de dados atualizado com sucesso!'); });
+
+                await fetchOpenPhishAndUpdateDatabase(blacklistDB, whitelistDB, blacklist, whitelist)
+                    .then(() => { console.log('Fetch openPhish realizado, banco de dados atualizado com sucesso!'); })
+                    .catch(err => { console.log(err) });
+
             } else { console.log('Nenhuma atualização do banco de dados blacklist foi realizada'); }
 
             // const links = ['https://sites.google.com', 'http://sites.google.com','https://accounts.google.com','http://accounts.google.com', 'https://docs.google.com','http://docs.google.com',

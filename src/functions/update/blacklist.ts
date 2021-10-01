@@ -13,7 +13,7 @@ const fetchPhishTankAndUpdateDatabase = async (blacklistDB, whitelistDB, dataBla
 const fetchOpenPhishAndUpdateDatabase = async (blacklistDB, whitelistDB, dataBlacklist, dataWhitelist) => {
     await fetchOpenPhish(dataWhitelist)
         .then(fetchArray => {
-            console.log(fetchArray);
+            console.log('fetchArray', fetchArray);
             updateAndInsert(fetchArray, dataBlacklist, blacklistDB, 'openPhish');
         })
         .catch((_) => { return null });

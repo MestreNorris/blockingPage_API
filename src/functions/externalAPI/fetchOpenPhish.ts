@@ -9,7 +9,7 @@ const fetchOpenPhish = async (dataWhitelist) => {
     const db = await fetchData(URL_OPENPHISH);
     let database = db.split('\n');
 
-    if (database) {
+    if (false) {
         for (let index = 0; index < database.length; index++) {
             let url = database[index];
             const date = dateNow();

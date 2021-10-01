@@ -8,7 +8,7 @@ let listBlacklist_OpenPhish = [];
 const fetchOpenPhish = async (dataWhitelist) => {
     const db = await fetchData(URL_OPENPHISH);
     let database = db.split('\n');
-    
+
     if (database) {
         for (let index = 0; index < database.length; index++) {
             let url = database[index];
@@ -18,8 +18,7 @@ const fetchOpenPhish = async (dataWhitelist) => {
             if (url != null) { listBlacklist_OpenPhish.push({ link: url, date }) }
         }
         return (removeDuplicates(listBlacklist_OpenPhish))
-    } else { return null }
-
+    } else { throw new Error('Fetch database OpenPhish não realizado') }
 }
 
 export { fetchOpenPhish }

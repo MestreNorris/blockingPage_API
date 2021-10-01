@@ -18,7 +18,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         updateAll();
         break;
       default:
-        res.setHeader('Allow', ['GET', 'POST']);
+        res.setHeader('Allow', ['GET', 'POST', 'OPTIONS']);
         res.status(405).end(`Method ${method} não suportado`)
         break;
     }

@@ -14,6 +14,9 @@ const browserHeaders = {
     'sec-fetch-site': 'none',
     'sec-fetch-user': '?1',
     'upgrade-insecure-requests': '1',
+    'Access-Control-Allow-Origin': '*',
+    "Access-Control-Allow-Headers": 'Origin, X-Requested-With, Content-Type, Accept',
+    'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
     'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36(KHTML, like Gecko) Chrome / 93.0.4577.82 Safari / 537.36'
 };
 

@@ -76,7 +76,7 @@ const updateAndInsert = async (fetchArray, dataBlacklist, blacklistDB, dbPhishTa
                 }
             }
             if (updateList.length > 0) {
-                await blacklistDB.updateMany({ _id: { $in: updateList } }, { $push: { activityDate: { date: dateNow(), phishTank: dbPhishTank, openPhish: dbOpenPhish } } });
+                await blacklistDB.updateMany({ _id: { $in: updateList } }, { $push: { activityDate: { date: dateNow(), phishTank: true, openPhish: true } } });
             }
             if (updateActivityDatabase.length > 0) {
                 if (dbPhishTank) {

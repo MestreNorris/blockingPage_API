@@ -1,4 +1,3 @@
-import { rejects } from 'assert';
 import { removeDuplicates } from '../data/array';
 import { dateNow } from '../data/date';
 import { fetchData, isValidUrl } from '../data/fetch';

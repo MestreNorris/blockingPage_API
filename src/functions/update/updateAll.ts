@@ -9,11 +9,11 @@ import { addWhitelist } from "./whitelist";
 
 const updateAll = async () => {
     try {
-        console.log('===============================================================================')
         const { blacklistDB, whitelistDB, metricDB } = await getAllDatabases();
         const { blacklist, whitelist, metric } = await getDataAllDatabases();
 
         if (metricDB != null) {
+            console.log('===============================================================================')
             const metricData = await metricDB.findOne();
             updateMetricQntRequest(metricDB, metricData).then(() => { console.log('| A quantidade de requisições realizadas foram atualizadas no banco de dados'); });
 

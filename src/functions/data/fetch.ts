@@ -21,8 +21,25 @@ const browserHeaders = {
 };
 
 const fetchData = async (url) => {
-    try { return (await axios.get(url, { headers: browserHeaders }).then((response) => { return response.data })); }
-    catch (_) { return null; }
+    let result = { error: false, data: null, response: null }
+
+    await axios.get(url, { headers: browserHeaders })
+        .then((response) => {
+            result.response = {
+                status: response.status,
+                statusText: response.statusText,
+                url: response.config.url,
+                method: response.config.method,
+                proxy: response.config.proxy,
+                type: response.config.responseType
+            }
+
+            if ((response.status == 200) && (response.statusText == 'OK')) {
+                result.error = false; result.data = response.data
+            } else { result.error = true; result.data = null; }
+        })
+        .catch((_) => { result.error = true; });
+    return result;
 };
 
 function isValidUrl(string, dataWhitelist) {

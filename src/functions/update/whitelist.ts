@@ -16,4 +16,11 @@ const addWhitelist = async (url) => {
         whitelistDB.insertOne(whitelist);
     }
 }
+
+// const links = ['https://sites.google.com', 'http://sites.google.com','https://accounts.google.com','http://accounts.google.com', 'https://docs.google.com','http://docs.google.com',
+// 'https://hangouts.google.com','http://hangouts.google.com','https://meet.google.com','http://meet.google.com']
+// for (let index = 0; index < links.length; index++) {
+//     addWhitelist(links[index]);
+// }
+
 export { addWhitelist }

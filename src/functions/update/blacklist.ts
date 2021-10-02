@@ -5,17 +5,37 @@ import { fetchPhishTank } from '../externalAPI/fetchPhishTank';
 import { Blacklist } from '../interfaces/index'
 
 const fetchPhishTankAndUpdateDatabase = async (blacklistDB, whitelistDB, dataBlacklist, dataWhitelist) => {
+    let result = { error: false, data: null, response: null }
+
     await fetchPhishTank(dataWhitelist)
-        .then(fetchArray => { updateAndInsert(fetchArray, dataBlacklist, blacklistDB, 'phishTank') })
-        .catch((_) => { return null });
+        .then(res => {
+            if (!res.error) {
+                updateAndInsert(res.data, dataBlacklist, blacklistDB, 'phishTank')
+                    .then(() => {
+                        result.error = false;
+                        result.response = res.response;
+                    });
+            } else { result = res; }
+        })
+        .catch((_) => { result.error = true });
+    return result;
 }
 
 const fetchOpenPhishAndUpdateDatabase = async (blacklistDB, whitelistDB, dataBlacklist, dataWhitelist) => {
+    let result = { error: false, data: null, response: null }
+
     await fetchOpenPhish(dataWhitelist)
-        .then(fetchArray => {
-            updateAndInsert(fetchArray, dataBlacklist, blacklistDB, 'openPhish');
+        .then(res => {
+            if (!res.error) {
+                updateAndInsert(res.data, dataBlacklist, blacklistDB, 'openPhish')
+                    .then(() => {
+                        result.error = false;
+                        result.response = res.response;
+                    });
+            } else { result = res; }
         })
-        .catch((err) => { return err });
+        .catch((_) => { result.error = true });
+    return result;
 }
 
 const newArray = (arrayDatabase, arrayFetch) => {

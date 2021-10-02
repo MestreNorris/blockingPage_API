@@ -10,7 +10,7 @@ const fetchPhishTankAndUpdateDatabase = async (blacklistDB, whitelistDB, dataBla
     await fetchPhishTank(dataWhitelist)
         .then(res => {
             if (!res.error) {
-                updateAndInsert(res.data, dataBlacklist, blacklistDB, 'phishTank')
+                updateAndInsert(res.data, dataBlacklist, blacklistDB, true, false)
                     .then(() => {
                         result.error = false;
                         result.response = res.response;
@@ -27,7 +27,7 @@ const fetchOpenPhishAndUpdateDatabase = async (blacklistDB, whitelistDB, dataBla
     await fetchOpenPhish(dataWhitelist)
         .then(res => {
             if (!res.error) {
-                updateAndInsert(res.data, dataBlacklist, blacklistDB, 'openPhish')
+                updateAndInsert(res.data, dataBlacklist, blacklistDB, false, true)
                     .then(() => {
                         result.error = false;
                         result.response = res.response;
@@ -55,7 +55,7 @@ const newArray = (arrayDatabase, arrayFetch) => {
     return { newArr, updateActivity };
 }
 
-const updateAndInsert = async (fetchArray, dataBlacklist, blacklistDB, typeDatabase) => {
+const updateAndInsert = async (fetchArray, dataBlacklist, blacklistDB, dbPhishTank, dbOpenPhish) => {
     let updateActivityDatabase = [];
     if (fetchArray != null) {
         if (dataBlacklist.length > 0) { dataBlacklist = sortArray(dataBlacklist); }
@@ -76,12 +76,12 @@ const updateAndInsert = async (fetchArray, dataBlacklist, blacklistDB, typeDatab
                 }
             }
             if (updateList.length > 0) {
-                await blacklistDB.updateMany({ _id: { $in: updateList } }, { $push: { activityDate: { date: dateNow(), phishTank: false, openPhish: false } } });
+                await blacklistDB.updateMany({ _id: { $in: updateList } }, { $push: { activityDate: { date: dateNow(), phishTank: dbPhishTank, openPhish: dbOpenPhish } } });
             }
             if (updateActivityDatabase.length > 0) {
-                if (typeDatabase == 'phishTank') {
+                if (dbPhishTank) {
                     await blacklistDB.updateMany({ _id: { $in: updateActivityDatabase }, "activityDate.date": dateNow() }, { "$set": { "activityDate.$.phishTank": true } });
-                } else if (typeDatabase == 'openPhish') {
+                } else if (dbOpenPhish) {
                     await blacklistDB.updateMany({ _id: { $in: updateActivityDatabase }, "activityDate.date": dateNow() }, { "$set": { "activityDate.$.openPhish": true } });
                 }
             }

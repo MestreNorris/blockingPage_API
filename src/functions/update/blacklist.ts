@@ -38,7 +38,7 @@ const fetchOpenPhishAndUpdateDatabase = async (blacklistDB, whitelistDB, dataBla
     return result;
 }
 
-const newArray = (arrayDatabase, arrayFetch) => {
+const newArray = (arrayDatabase, arrayFetch, dbPhishTank, dbOpenPhish) => {
     const newArr = [], updateActivity = [];
 
     for (let index = 0; index < arrayFetch.length; index++) {
@@ -47,7 +47,7 @@ const newArray = (arrayDatabase, arrayFetch) => {
             const newBlacklist: Blacklist = {
                 link: arrayFetch[index].link,
                 creatAt: arrayFetch[index].date,
-                activityDate: new Array({ date: dateNow(), phishTank: false, openPhish: false })
+                activityDate: new Array({ date: dateNow(), phishTank: dbPhishTank, openPhish: dbOpenPhish })
             };
             newArr.push(newBlacklist);
         } else { updateActivity.push(isExist); }
@@ -59,7 +59,8 @@ const updateAndInsert = async (fetchArray, dataBlacklist, blacklistDB, dbPhishTa
     let updateActivityDatabase = [];
     if (fetchArray != null) {
         if (dataBlacklist.length > 0) { dataBlacklist = sortArray(dataBlacklist); }
-        const { newArr, updateActivity } = newArray(dataBlacklist, fetchArray);
+        const { newArr, updateActivity } = newArray(dataBlacklist, fetchArray, dbPhishTank, dbOpenPhish);
+
         if (newArr.length != 0) { await blacklistDB.insertMany(newArr); }
 
         if (updateActivity.length > 0) {
@@ -76,7 +77,7 @@ const updateAndInsert = async (fetchArray, dataBlacklist, blacklistDB, dbPhishTa
                 }
             }
             if (updateList.length > 0) {
-                await blacklistDB.updateMany({ _id: { $in: updateList } }, { $push: { activityDate: { date: dateNow(), phishTank: true, openPhish: true } } });
+                await blacklistDB.updateMany({ _id: { $in: updateList } }, { $push: { activityDate: { date: dateNow(), phishTank: false, openPhish: false } } });
             }
             if (updateActivityDatabase.length > 0) {
                 if (dbPhishTank) {

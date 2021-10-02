@@ -17,19 +17,19 @@ const updateAll = async () => {
 
             if (metricData.lastUpdate !== dateNow()) {
                 await metricDB.updateOne({ _id: metricData._id }, { $set: { lastUpdate: dateNow() } });
-                // await fetchPhishTankAndUpdateDatabase(blacklistDB, whitelistDB, blacklist, whitelist)
-                //     .then((res) => {
-                //         if (!res.error) { console.log('| Fetch phishTank realizado, banco de dados atualizado com sucesso!'); }
-                //         else {
-                //             console.error(
-                //                 `| > Erro: Erro ao capturar dados do banco de dados PhishTank \n` +
-                //                 `| | Status: ${res.response.status} \n` +
-                //                 `| | StatusText: ${res.response.statusText} \n` +
-                //                 `| | Url: ${res.response.url} \n` +
-                //                 `| > Method: ${res.response.method}`)
-                //         }
-                //     })
-                //     .catch((_) => { console.error('| > Erro ao capturar dados do banco de dados PhishTank') })
+                await fetchPhishTankAndUpdateDatabase(blacklistDB, whitelistDB, blacklist, whitelist)
+                    .then((res) => {
+                        if (!res.error) { console.log('| Fetch phishTank realizado, banco de dados atualizado com sucesso!'); }
+                        else {
+                            console.error(
+                                `| > Erro: Erro ao capturar dados do banco de dados PhishTank \n` +
+                                `| | Status: ${res.response.status} \n` +
+                                `| | StatusText: ${res.response.statusText} \n` +
+                                `| | Url: ${res.response.url} \n` +
+                                `| > Method: ${res.response.method}`)
+                        }
+                    })
+                    .catch((_) => { console.error('| > Erro ao capturar dados do banco de dados PhishTank') })
 
                 await fetchOpenPhishAndUpdateDatabase(blacklistDB, whitelistDB, blacklist, whitelist)
                     .then((res) => {

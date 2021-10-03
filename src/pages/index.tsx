@@ -24,7 +24,7 @@ const IndexPage = () => (
         </tr>
         <tr>
           <th>VERSÃO</th>
-          <th>0.0.3</th>
+          <th>0.0.7</th>
         </tr>
         <tr>
           <th>BANCO DE DADOS EXISTENTES</th>

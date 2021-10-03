@@ -11,13 +11,12 @@ const updateAll = async () => {
         const { blacklist, whitelist, metric } = await getDataAllDatabases();
 
         if (metricDB != null) {
-            console.log('===============================================================================')
             const metricData = await metricDB.findOne();
             updateMetricQntRequest(metricDB, metricData).then(() => { console.log('| A quantidade de requisições realizadas foram atualizadas no banco de dados'); });
 
             if (metricData.lastUpdate !== dateNow()) {
                 await metricDB.updateOne({ _id: metricData._id }, { $set: { lastUpdate: dateNow() } });
-                await fetchPhishTankAndUpdateDatabase(blacklistDB, whitelistDB, blacklist, whitelist)
+                fetchPhishTankAndUpdateDatabase(blacklistDB, whitelistDB, blacklist, whitelist)
                     .then((res) => {
                         if (!res.error) { console.log('| Fetch phishTank realizado, banco de dados atualizado com sucesso!'); }
                         else {
@@ -31,7 +30,7 @@ const updateAll = async () => {
                     })
                     .catch((_) => { console.error('| > Erro ao capturar dados do banco de dados PhishTank') })
 
-                await fetchOpenPhishAndUpdateDatabase(blacklistDB, whitelistDB, blacklist, whitelist)
+                fetchOpenPhishAndUpdateDatabase(blacklistDB, whitelistDB, blacklist, whitelist)
                     .then((res) => {
                         if (!res.error) { console.log('| Fetch openPhish realizado, banco de dados atualizado com sucesso!'); }
                         else {
@@ -47,9 +46,8 @@ const updateAll = async () => {
 
             } else { console.log('| Nenhuma atualização do banco de dados blacklist foi realizada'); }
 
-            await removeWhitelistInBlacklistDB(blacklistDB, whitelistDB, blacklist, whitelist).then((res) => { res ? console.log('| Links whitelist foram removidos do banco de dados blacklist') : console.log('| Nenhum links whitelist encontrado no banco de dados blacklist'); });
-            await deleteDuplicates(blacklistDB, blacklist).then((res) => { res ? console.log('| Registros duplicados no banco de dados blacklist removidos') : console.log('| Nenhum registros duplicado encontrado no banco de dados blacklist'); });
-            console.log('===============================================================================' + '\n')
+            removeWhitelistInBlacklistDB(blacklistDB, whitelistDB, blacklist, whitelist).then((res) => { res ? console.log('| Links whitelist foram removidos do banco de dados blacklist') : console.log('| Nenhum links whitelist encontrado no banco de dados blacklist'); });
+            deleteDuplicates(blacklistDB, blacklist).then((res) => { res ? console.log('| Registros duplicados no banco de dados blacklist removidos') : console.log('| Nenhum registros duplicado encontrado no banco de dados blacklist'); });
 
         }
     } catch (_) { return null }

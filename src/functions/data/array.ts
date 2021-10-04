@@ -15,19 +15,8 @@ const numberDuplicates = (array) => {
 }
 
 const removeDuplicates = (array) => {
-    let newArray = [];
-
-    for (let index = 0; index < array.length; index++) {
-        if (newArray.length == 0) { newArray.push(array[index]) }
-        else {
-            let exist = false;
-            for (let j = 0; j < newArray.length; j++) {
-                if (newArray[j].link == array[index].link) { exist = true; }
-            }
-            if (exist == false) { newArray.push(array[index]) }
-        }
-    }
-    return newArray;
+    const key = 'link';
+    return [...new Map(array.map(item => [item[key], item])).values()]
 }
 
 const sortArray = (database) => {

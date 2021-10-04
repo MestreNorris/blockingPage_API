@@ -58,8 +58,7 @@ const newArray = (arrayDatabase, arrayFetch, dbPhishTank, dbOpenPhish) => {
 const updateAndInsert = async (fetchArray, dataBlacklist, blacklistDB, dbPhishTank, dbOpenPhish) => {
     let updateActivityDatabase = [];
     if (fetchArray != null) {
-        if (dataBlacklist.length > 0) { dataBlacklist = sortArray(dataBlacklist); }
-        const { newArr, updateActivity } = newArray(dataBlacklist, fetchArray, dbPhishTank, dbOpenPhish);
+        const { newArr, updateActivity } = newArray(sortArray(dataBlacklist), sortArray(fetchArray), dbPhishTank, dbOpenPhish);
 
         if (newArr.length != 0) { await blacklistDB.insertMany(newArr); }
 

@@ -9,6 +9,7 @@ const updateAll = async () => {
     try {
         const { blacklistDB, whitelistDB, metricDB } = await getAllDatabases();
         const { blacklist, whitelist, metric } = await getDataAllDatabases();
+        console.log('------------------------------------------------------------------------------------')
 
         if (metricDB != null) {
             const metricData = await metricDB.findOne();
@@ -43,8 +44,9 @@ const updateAll = async () => {
                         }
                     }).catch((_) => { console.error('| > Erro ao capturar dados do banco de dados OpenPhish') })
             } else { console.log('| Nenhuma atualização do banco de dados blacklist foi realizada'); }
-            removeWhitelistInBlacklistDB(blacklistDB, whitelistDB, blacklist, whitelist).then((res) => { res ? console.log('| Links whitelist foram removidos do banco de dados blacklist') : console.log('| Nenhum links whitelist encontrado no banco de dados blacklist'); });
-            deleteDuplicates(blacklistDB, blacklist).then((res) => { res ? console.log('| Registros duplicados no banco de dados blacklist removidos') : console.log('| Nenhum registros duplicado encontrado no banco de dados blacklist'); });
+            await removeWhitelistInBlacklistDB(blacklistDB, whitelistDB, blacklist, whitelist).then((res) => { res ? console.log('| Links whitelist foram removidos do banco de dados blacklist') : console.log('| Nenhum links whitelist encontrado no banco de dados blacklist'); });
+            await deleteDuplicates(blacklistDB, blacklist).then((res) => { res ? console.log('| Registros duplicados no banco de dados blacklist removidos') : console.log('| Nenhum registros duplicado encontrado no banco de dados blacklist'); });
+            console.log('------------------------------------------------------------------------------------')
         }
     } catch (err) { return err; }
 }

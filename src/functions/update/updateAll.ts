@@ -42,10 +42,9 @@ const updateAll = async () => {
                                 `| > Method: ${res.response.method}`)
                         }
                     }).catch((_) => { console.error('| > Erro ao capturar dados do banco de dados OpenPhish') })
+
+                removeDuplicatesAndWhitelist(blacklistDB, whitelistDB, blacklist, whitelist);
             } else { console.log('| Nenhuma atualização do banco de dados blacklist foi realizada'); }
-
-            removeDuplicatesAndWhitelist(blacklistDB, whitelistDB, blacklist, whitelist);
-
         }
     } catch (err) { return err; }
 }
@@ -54,7 +53,7 @@ function removeDuplicatesAndWhitelist(blacklistDB, whitelistDB, blacklist, white
     setTimeout(() => {
         removeWhitelistInBlacklistDB(blacklistDB, whitelistDB, blacklist, whitelist).then((res) => { res ? console.log('| Links whitelist foram removidos do banco de dados blacklist') : console.log('| Nenhum links whitelist encontrado no banco de dados blacklist'); });
         deleteDuplicates(blacklistDB, blacklist).then((res) => { res ? console.log('| Registros duplicados no banco de dados blacklist removidos') : console.log('| Nenhum registros duplicado encontrado no banco de dados blacklist'); });
-    }, 20000);
+    }, 30000);
 }
 
 export { updateAll }

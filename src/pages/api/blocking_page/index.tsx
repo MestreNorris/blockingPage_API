@@ -1,11 +1,8 @@
-import { performance } from "perf_hooks";
 import { NextApiRequest, NextApiResponse } from 'next';
 import { getDataAllDatabases } from '../../../functions/db/getDatabase'
 import { updateAll } from '../../../functions/update/updateAll'
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-
-  var startTime = performance.now();
 
   const { method } = req;
   const dataDatabase = await getDataAllDatabases();
@@ -26,13 +23,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         break;
     }
   } catch (err) { res.status(500).json({ statusCode: 500, message: err.message }) }
-
-  millisToMinutesAndSeconds((performance.now() - startTime));
-}
-
-function millisToMinutesAndSeconds(millis) {
-  let segundos = millis / 1000;
-  console.log('Tempo de execução:', segundos.toFixed(2) + ' segundos');
 }
 
 export default handler;

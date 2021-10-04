@@ -29,9 +29,7 @@ const fetchData = async (url) => {
                 status: response.status,
                 statusText: response.statusText,
                 url: response.config.url,
-                method: response.config.method,
-                proxy: response.config.proxy,
-                type: response.config.responseType
+                method: response.config.method
             }
 
             if ((response.status == 200) && (response.statusText == 'OK')) {

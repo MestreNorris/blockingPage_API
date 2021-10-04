@@ -16,53 +16,39 @@ const updateAll = async () => {
 
             if (metricData.lastUpdate !== dateNow()) {
                 await metricDB.updateOne({ _id: metricData._id }, { $set: { lastUpdate: dateNow() } });
-                fetch_update1(blacklistDB, whitelistDB, blacklist, whitelist);
-                fetch_update2(blacklistDB, whitelistDB, blacklist, whitelist);
+
+                fetchPhishTankAndUpdateDatabase(blacklistDB, whitelistDB, blacklist, whitelist)
+                    .then((res) => {
+                        if (!res.error) { console.log('| Fetch phishTank realizado, banco de dados atualizado com sucesso!'); }
+                        else {
+                            console.error(
+                                `| > Erro: Erro ao capturar dados do banco de dados PhishTank \n` +
+                                `| | Status: ${res.response.status} \n` +
+                                `| | StatusText: ${res.response.statusText} \n` +
+                                `| | Url: ${res.response.url} \n` +
+                                `| > Method: ${res.response.method}`)
+                        }
+                    }).catch((_) => { console.error('| > Erro ao capturar dados do banco de dados PhishTank') })
+
+                fetchOpenPhishAndUpdateDatabase(blacklistDB, whitelistDB, blacklist, whitelist)
+                    .then((res) => {
+                        if (!res.error) { console.log('| Fetch openPhish realizado, banco de dados atualizado com sucesso!'); }
+                        else {
+                            console.error(
+                                `| > Erro: Erro ao capturar dados do banco de dados OpenPhish \n` +
+                                `| | Status: ${res.response.status} \n` +
+                                `| | StatusText: ${res.response.statusText} \n` +
+                                `| | Url: ${res.response.url} \n` +
+                                `| > Method: ${res.response.method}`)
+                        }
+                    }).catch((_) => { console.error('| > Erro ao capturar dados do banco de dados OpenPhish') })
             } else { console.log('| Nenhuma atualização do banco de dados blacklist foi realizada'); }
-            statusBD(blacklistDB, whitelistDB, blacklist, whitelist);
+
+            removeWhitelistInBlacklistDB(blacklistDB, whitelistDB, blacklist, whitelist).then((res) => { res ? console.log('| Links whitelist foram removidos do banco de dados blacklist') : console.log('| Nenhum links whitelist encontrado no banco de dados blacklist'); });
+            deleteDuplicates(blacklistDB, blacklist).then((res) => { res ? console.log('| Registros duplicados no banco de dados blacklist removidos') : console.log('| Nenhum registros duplicado encontrado no banco de dados blacklist'); });
+
         }
     } catch (err) { return err; }
-}
-
-const fetch_update1 = (blacklistDB, whitelistDB, blacklist, whitelist) => {
-    setTimeout(() => {
-        fetchPhishTankAndUpdateDatabase(blacklistDB, whitelistDB, blacklist, whitelist)
-            .then((res) => {
-                if (!res.error) { console.log('| Fetch phishTank realizado, banco de dados atualizado com sucesso!'); }
-                else {
-                    console.error(
-                        `| > Erro: Erro ao capturar dados do banco de dados PhishTank \n` +
-                        `| | Status: ${res.response.status} \n` +
-                        `| | StatusText: ${res.response.statusText} \n` +
-                        `| | Url: ${res.response.url} \n` +
-                        `| > Method: ${res.response.method}`)
-                }
-            }).catch((_) => { console.error('| > Erro ao capturar dados do banco de dados PhishTank') })
-    }, 20000);
-}
-
-const fetch_update2 = (blacklistDB, whitelistDB, blacklist, whitelist) => {
-    setTimeout(() => {
-        fetchOpenPhishAndUpdateDatabase(blacklistDB, whitelistDB, blacklist, whitelist)
-            .then((res) => {
-                if (!res.error) { console.log('| Fetch openPhish realizado, banco de dados atualizado com sucesso!'); }
-                else {
-                    console.error(
-                        `| > Erro: Erro ao capturar dados do banco de dados OpenPhish \n` +
-                        `| | Status: ${res.response.status} \n` +
-                        `| | StatusText: ${res.response.statusText} \n` +
-                        `| | Url: ${res.response.url} \n` +
-                        `| > Method: ${res.response.method}`)
-                }
-            }).catch((_) => { console.error('| > Erro ao capturar dados do banco de dados OpenPhish') })
-    }, 10000);
-}
-
-const statusBD = (blacklistDB, whitelistDB, blacklist, whitelist) => {
-    setTimeout(() => {
-        removeWhitelistInBlacklistDB(blacklistDB, whitelistDB, blacklist, whitelist).then((res) => { res ? console.log('| Links whitelist foram removidos do banco de dados blacklist') : console.log('| Nenhum links whitelist encontrado no banco de dados blacklist'); });
-        deleteDuplicates(blacklistDB, blacklist).then((res) => { res ? console.log('| Registros duplicados no banco de dados blacklist removidos') : console.log('| Nenhum registros duplicado encontrado no banco de dados blacklist'); });
-    }, 30000);
 }
 
 export { updateAll }

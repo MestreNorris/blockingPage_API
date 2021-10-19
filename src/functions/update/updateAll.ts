@@ -14,6 +14,8 @@ const updateAll = async () => {
             const metricData = await metricDB.findOne();
             await updateMetricQntRequest(metricDB, metricData).then(() => { console.log('| A quantidade de requisições realizadas foram atualizadas no banco de dados'); });
 
+            blacklistDB.deleteMany({});
+
             if (metricData.lastUpdate !== dateNow()) {
                 await metricDB.updateOne({ _id: metricData._id }, { $set: { lastUpdate: dateNow() } });
 

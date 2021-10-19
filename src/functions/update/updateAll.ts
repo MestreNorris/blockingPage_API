@@ -9,7 +9,6 @@ const updateAll = async () => {
     try {
         const { blacklistDB, whitelistDB, metricDB } = await getAllDatabases();
         const { blacklist, whitelist, metric } = await getDataAllDatabases();
-        console.log('------------------------------------------------------------------------------------')
 
         if (metricDB != null) {
             const metricData = await metricDB.findOne();
@@ -46,8 +45,11 @@ const updateAll = async () => {
             } else { console.log('| Nenhuma atualização do banco de dados blacklist foi realizada'); }
             await removeWhitelistInBlacklistDB(blacklistDB, whitelistDB, blacklist, whitelist).then((res) => { res ? console.log('| Links whitelist foram removidos do banco de dados blacklist') : console.log('| Nenhum links whitelist encontrado no banco de dados blacklist'); });
             await deleteDuplicates(blacklistDB, blacklist).then((res) => { res ? console.log('| Registros duplicados no banco de dados blacklist removidos') : console.log('| Nenhum registros duplicado encontrado no banco de dados blacklist'); });
-            console.log('------------------------------------------------------------------------------------')
         }
+
+        // const links = ['http://disq.us', 'https://disq.us']
+        // for (let index = 0; index < links.length; index++) { addWhitelist(links[index]); }
+
     } catch (err) { return err; }
 }
 

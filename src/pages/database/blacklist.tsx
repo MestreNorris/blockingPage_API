@@ -27,7 +27,6 @@ function databaseBlacklist({ database, duplicates, title }) {
               <th>ID</th>
               <th>LINK</th>
               <th>DATA DA CRIAÇÃO</th>
-              <th>DIAS DE ATIVIDADE</th>
             </tr>
           </thead>
           <tbody>
@@ -36,7 +35,6 @@ function databaseBlacklist({ database, duplicates, title }) {
                 <td>{links._id}</td>
                 <td>{links.link}</td>
                 <td>{links.creatAt}</td>
-                <td>{links.activityDate.length}</td>
               </tr>
             ))}
           </tbody>

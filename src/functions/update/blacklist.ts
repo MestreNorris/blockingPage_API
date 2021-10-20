@@ -1,5 +1,4 @@
 import { searchBinary, sortArray } from '../data/array';
-import { dateNow } from '../data/date';
 import { fetchOpenPhish } from '../externalAPI/fetchOpenPhish';
 import { fetchPhishTank } from '../externalAPI/fetchPhishTank';
 import { Blacklist } from '../interfaces/index'
@@ -10,7 +9,7 @@ const fetchPhishTankAndUpdateDatabase = async (blacklistDB, whitelistDB, dataBla
     await fetchPhishTank(dataWhitelist)
         .then(res => {
             if (!res.error) {
-                updateAndInsert(res.data, dataBlacklist, blacklistDB, true, false)
+                updateAndInsert(res.data, dataBlacklist, blacklistDB)
                     .then(() => {
                         result.error = false;
                         result.response = res.response;
@@ -27,7 +26,7 @@ const fetchOpenPhishAndUpdateDatabase = async (blacklistDB, whitelistDB, dataBla
     await fetchOpenPhish(dataWhitelist)
         .then(res => {
             if (!res.error) {
-                updateAndInsert(res.data, dataBlacklist, blacklistDB, false, true)
+                updateAndInsert(res.data, dataBlacklist, blacklistDB)
                     .then(() => {
                         result.error = false;
                         result.response = res.response;
@@ -38,54 +37,24 @@ const fetchOpenPhishAndUpdateDatabase = async (blacklistDB, whitelistDB, dataBla
     return result;
 }
 
-const newArray = (arrayDatabase, arrayFetch, dbPhishTank, dbOpenPhish) => {
-    const newArr = [], updateActivity = [];
+const newArray = (arrayDatabase, arrayFetch) => {
+    const newArr = [];
 
     for (let index = 0; index < arrayFetch.length; index++) {
         const isExist = searchBinary(arrayDatabase, arrayFetch[index].link);
         if (isExist == false) {
-            const newBlacklist: Blacklist = {
-                link: arrayFetch[index].link,
-                creatAt: arrayFetch[index].date,
-                activityDate: new Array({ date: dateNow(), phishTank: dbPhishTank, openPhish: dbOpenPhish })
-            };
+            const newBlacklist: Blacklist = { link: arrayFetch[index].link, creatAt: arrayFetch[index].date };
             newArr.push(newBlacklist);
-        } else { updateActivity.push(isExist); }
+        }
     }
-    return { newArr, updateActivity };
+    return newArr;
 }
 
-const updateAndInsert = async (fetchArray, dataBlacklist, blacklistDB, dbPhishTank, dbOpenPhish) => {
-    let updateActivityDatabase = [];
+const updateAndInsert = async (fetchArray, dataBlacklist, blacklistDB) => {
     if (fetchArray != null) {
-        const { newArr, updateActivity } = newArray(sortArray(dataBlacklist), sortArray(fetchArray), dbPhishTank, dbOpenPhish);
+        const newArr = newArray(sortArray(dataBlacklist), sortArray(fetchArray));
 
         if (newArr.length != 0) { await blacklistDB.insertMany(newArr); }
-
-        if (updateActivity.length > 0) {
-            let updateList = [];
-
-            for (let index = 0; index < updateActivity.length; index++) {
-                let lastObj = (updateActivity[index].activityDate.length) - 1;
-                updateActivityDatabase.push(updateActivity[index]._id);
-                if (lastObj < 0) { updateList.push(updateActivity[index]._id); }
-                else {
-                    if (updateActivity[index].activityDate[lastObj].date != dateNow()) {
-                        updateList.push(updateActivity[index]._id);
-                    }
-                }
-            }
-            if (updateList.length > 0) {
-                await blacklistDB.updateMany({ _id: { $in: updateList } }, { $push: { activityDate: { date: dateNow(), phishTank: false, openPhish: false } } });
-            }
-            if (updateActivityDatabase.length > 0) {
-                if (dbPhishTank) {
-                    await blacklistDB.updateMany({ _id: { $in: updateActivityDatabase }, "activityDate.date": dateNow() }, { "$set": { "activityDate.$.phishTank": true } });
-                } else if (dbOpenPhish) {
-                    await blacklistDB.updateMany({ _id: { $in: updateActivityDatabase }, "activityDate.date": dateNow() }, { "$set": { "activityDate.$.openPhish": true } });
-                }
-            }
-        }
     }
 }
 

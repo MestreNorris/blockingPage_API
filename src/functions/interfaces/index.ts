@@ -6,7 +6,6 @@ export type Whitelist = {
 export type Blacklist = {
     link?: String
     creatAt?: String
-    activityDate?: Array<{ date: String, phishTank: boolean, openPhish: boolean }>
 }
 
 export type Metric = {

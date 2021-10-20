@@ -17,8 +17,6 @@ const updateAll = async () => {
             if (metricData.lastUpdate !== dateNow()) {
                 await metricDB.updateOne({ _id: metricData._id }, { $set: { lastUpdate: dateNow() } });
 
-                await blacklistDB.deleteMany({}).then(() => { console.log('| Registros removidos'); });
-
                 await fetchPhishTankAndUpdateDatabase(blacklistDB, whitelistDB, blacklist, whitelist)
                     .then((res) => {
                         if (!res.error) { console.log('| Fetch phishTank realizado, banco de dados atualizado com sucesso!'); }

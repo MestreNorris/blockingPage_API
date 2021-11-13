@@ -4,6 +4,7 @@ import { fetchOpenPhishAndUpdateDatabase, fetchPhishTankAndUpdateDatabase } from
 import { deleteDuplicates } from "./deleteDuplicates";
 import { removeWhitelistInBlacklistDB } from "./removeWhitelist";
 import { updateMetricQntRequest } from "./request";
+import { addWhitelist } from "./whitelist";
 
 const updateAll = async () => {
     try {
@@ -48,8 +49,8 @@ const updateAll = async () => {
             await deleteDuplicates(blacklistDB, blacklist).then((res) => { res ? console.log('| Registros duplicados no banco de dados blacklist removidos') : console.log('| Nenhum registros duplicado encontrado no banco de dados blacklist'); });
         }
 
-        // const links = ['http://disq.us', 'https://disq.us']
-        // for (let index = 0; index < links.length; index++) { addWhitelist(links[index]); }
+        const links = ['https://onedrive.live.com']
+        for (let index = 0; index < links.length; index++) { addWhitelist(links[index]); }
 
     } catch (err) { return err; }
 }

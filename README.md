@@ -7,7 +7,7 @@ A ferramenta também apresenta uma abordagem para proteção dos dados, limitand
 
 <img src="src/imagens/arquitetura.png" alt="Arquitetura do sistema" width="90%" height="90%">
 
-O repositório apresentado contempla apenas parte1 da ferramenta.
+O repositório apresentado contempla apenas parte2 da ferramenta.
 
 Part1 (BlockingPage_Extensão) - Plugin desenvolvido para navegador para identificação, bloqueio, remoção e notificação de links de phising. Ela também contempla a limitação de inserção de dados sensíveis do usuário a somente páginas seguras que o usuário estabelecer.
 

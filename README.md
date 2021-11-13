@@ -14,5 +14,5 @@ Part1 (BlockingPage_Extensão) - Plugin desenvolvido para navegador para identif
 Part 2 (BlockingPage_API) - Api para extração de links de phising em apis externas, utilizado para fornecer dados de páginas inseguras para plugin bloquear.
 
 ## Requisitos
-* Banco de dados MongoDB
-* Hospedagem Vercel
+* Banco de dados MongoDB (Cloud)
+* Hospedagem Vercel (Next JS)
